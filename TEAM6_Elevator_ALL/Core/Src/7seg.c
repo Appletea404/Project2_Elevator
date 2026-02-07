@@ -70,21 +70,9 @@ void SEVEN_SEG_Init()
 	dataOut_SEG(SEG_NUMBER[1]);
 }
 
-void SEVEN_SEG()
+void SEVEN_SEG(uint8_t floor)
 {
-	if(buttonGetPressed(0))
-	{
-		dataOut_SEG(SEG_NUMBER[1]);
-	}
-	if(buttonGetPressed(1))
-	{
-		dataOut_SEG(SEG_NUMBER[2]);
-	}
-	if(buttonGetPressed(2))
-	{
-		dataOut_SEG(SEG_NUMBER[3]);
-	}
-
+	dataOut_SEG(SEG_NUMBER[floor]);
 }
 
 

@@ -5,8 +5,8 @@
 #include "button.h"
 #include "tim.h"
 
-#ifndef INC_LEDBAR_H_
-#define INC_LEDBAR_H_
+#ifndef INC_7SEG_H_
+#define INC_7SEG_H_
 
 
 
@@ -20,7 +20,7 @@
 #define SRCLK_PIN_SEG GPIO_PIN_12
 
 void SEVEN_SEG_Init();
-void SEVEN_SEG();
+void SEVEN_SEG(uint8_t floor);
 void dataOut_SEG(uint8_t data);
 
 #endif /* INC_LEDBAR_H_ */

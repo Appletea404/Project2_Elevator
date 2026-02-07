@@ -26,6 +26,8 @@
 /* USER CODE BEGIN Includes */
 
 #include "button.h"
+#include "elevator.h"
+
 
 /* USER CODE END Includes */
 
@@ -50,7 +52,6 @@
 
 
 
-extern uint8_t current_floor = 1;
 
 
 
@@ -124,6 +125,14 @@ int main(void)
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_Base_Start(&htim11);
+
+
+  SEVEN_SEG_Init();
+
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -131,6 +140,8 @@ int main(void)
   while (1)
   {
 	  ButtonMove(current_floor);
+	  FND_ScanOnce();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -1,6 +1,7 @@
 "./Core/Src/7seg.o"
 "./Core/Src/button.o"
 "./Core/Src/delay.o"
+"./Core/Src/elevator.o"
 "./Core/Src/fnd.o"
 "./Core/Src/gpio.o"
 "./Core/Src/ledbar.o"
