@@ -1,0 +1,41 @@
+/*
+ * fnd.h
+ *
+ *  Created on: Jan 29, 2026
+ *      Author: appletea
+ */
+
+#ifndef INC_FND_H_
+#define INC_FND_H_
+
+#include "main.h"
+#include "button.h"
+
+#include "tim.h"
+
+
+#define SER_PORT GPIOA
+#define SER_PIN GPIO_PIN_12
+
+#define RCLK_PORT GPIOA
+#define RCLK_PIN GPIO_PIN_11
+
+#define SRCLK_PORT GPIOB
+#define SRCLK_PIN GPIO_PIN_12
+
+void SEVEN_SEG_Init();
+void SEVEN_SEG();
+void dataOut_SEG(uint8_t data);
+
+
+void ALL_DIG_INIT();
+void SEG_WRITE(uint8_t num);
+void DIG_ON(uint8_t idx);
+void FND_SCAN_ONCE();
+
+
+
+extern void FND_CONTROL();
+
+
+#endif /* INC_FND_H_ */

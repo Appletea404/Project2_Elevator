@@ -1,0 +1,25 @@
+
+#include "stm32f4xx_hal.h"
+#include "delay.h"
+#include "stdbool.h"
+#include "button.h"
+#include "tim.h"
+
+#ifndef INC_LEDBAR_H_
+#define INC_LEDBAR_H_
+
+
+
+#define SER_PORT GPIOA
+#define SER_PIN GPIO_PIN_12
+
+#define RCLK_PORT GPIOA
+#define RCLK_PIN GPIO_PIN_11
+
+#define SRCLK_PORT GPIOB
+#define SRCLK_PIN GPIO_PIN_12
+
+void 7SEG();
+
+
+#endif /* INC_LEDBAR_H_ */

@@ -1,0 +1,44 @@
+/*
+ * fnd.h
+ *
+ *  Created on: Jan 29, 2026
+ *      Author: appletea
+ */
+
+#ifndef INC_FND_H_
+#define INC_FND_H_
+
+#include "main.h"
+#include "button.h"
+#include "delay.h"
+
+#include "tim.h"
+
+
+#define DIG1_PORT GPIOB
+#define DIG1_PIN GPIO_PIN_2
+
+#define DIG2_PORT GPIOB
+#define DIG2_PIN GPIO_PIN_1
+
+#define DIG3_PORT GPIOB
+#define DIG3_PIN GPIO_PIN_15
+
+#define DIG4_PORT GPIOB
+#define DIG4_PIN GPIO_PIN_14
+
+#define SER_PORT_FND GPIOB
+#define SER_PIN_FND GPIO_PIN_13
+
+#define RCLK_PORT_FND GPIOC
+#define RCLK_PIN_FND GPIO_PIN_4
+
+#define SRCLK_PORT_FND GPIOA
+#define SRCLK_PIN_FND GPIO_PIN_10
+
+
+void dataOut_FND(uint8_t data)
+
+
+
+#endif /* INC_FND_H_ */

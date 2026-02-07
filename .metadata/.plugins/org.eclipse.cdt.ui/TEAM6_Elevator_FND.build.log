@@ -1,0 +1,10 @@
+02:13:10 **** Incremental Build of configuration Debug for project TEAM6_Elevator_FND ****
+make -j12 all 
+arm-none-eabi-size  TEAM6_Elevator_FND.elf 
+   text	   data	    bss	    dec	    hex	filename
+  12820	     72	   1736	  14628	   3924	TEAM6_Elevator_FND.elf
+Finished building: default.size.stdout
+ 
+
+02:13:10 Build Finished. 0 errors, 0 warnings. (took 71ms)
+

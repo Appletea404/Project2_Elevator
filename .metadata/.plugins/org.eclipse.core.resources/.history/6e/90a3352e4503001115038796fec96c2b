@@ -1,0 +1,7 @@
+#include <delay2.h>
+
+void delay_us2(uint16_t us)
+{
+    uint16_t start = __HAL_TIM_GET_COUNTER(&htim10);
+    while ((uint16_t)(__HAL_TIM_GET_COUNTER(&htim10) - start) < us);
+}

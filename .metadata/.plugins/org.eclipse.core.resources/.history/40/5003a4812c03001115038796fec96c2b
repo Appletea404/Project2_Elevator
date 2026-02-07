@@ -1,0 +1,20 @@
+
+#include "stm32f4xx_hal.h"
+#include "delay.h"
+#include "stdbool.h"
+#include "button.h"
+#include "tim.h"
+
+#ifndef INC_LEDBAR_H_
+#define INC_LEDBAR_H_
+
+typedef struct
+{
+  GPIO_TypeDef  *port;
+  uint16_t      number;
+  GPIO_PinState onState;
+  GPIO_PinState offState;
+}Segment_LED;
+
+
+#endif /* INC_LEDBAR_H_ */

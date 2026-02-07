@@ -1,0 +1,239 @@
+#include "fnd.h"
+
+
+/* =======================
+ *  Digit polarity (FIXED)
+ *  ======================= */
+#define DIG_ON   GPIO_PIN_RESET
+#define DIG_OFF  GPIO_PIN_SET
+
+/* =======================
+ *  7-seg letter patterns (approx.)
+ *  bit0=a, bit1=b, bit2=c, bit3=d, bit4=e, bit5=f, bit6=g
+ *  ======================= */
+#define SEG_A  0x77
+#define SEG_d  0x5E
+#define SEG_Y  0x6E
+void dataOut_FND(uint8_t data)
+{
+    /*
+     * i = 7 → 0
+     * MSB부터 LSB까지 순차적으로 전송
+     */
+	for(int i = 7; i >= 0; i--)
+	{
+        /*
+         * 현재 전송할 비트를 SER 핀에 출력
+         * data의 i번째 비트가 1이면 HIGH, 0이면 LOW
+         *
+         * 이 시점에서는 아직 74HC595 내부로 들어가지 않고
+         * 단순히 입력 핀에 값만 세팅된 상태
+         */
+		if(data & (1 << i))
+		{
+
+			HAL_GPIO_WritePin(SER_PORT_FND, SER_PIN_FND, GPIO_PIN_SET);
+		}
+		else
+		{
+			HAL_GPIO_WritePin(SER_PORT_FND, SER_PIN_FND, GPIO_PIN_RESET);
+		}
+
+        /*
+         * SRCLK(Shift Clock) 펄스 생성
+         *
+         * - SRCLK의 상승엣지에서 SER 값이
+         *   내부 쉬프트 레지스터로 이동
+         * - 이후 비트들은 한 칸씩 밀려남
+         *
+         * delay_us()는 setup/hold time 확보용 여유
+         */
+		HAL_GPIO_WritePin(SRCLK_PORT_FND, SRCLK_PIN_FND, GPIO_PIN_SET);
+		delay_us(5);
+
+		HAL_GPIO_WritePin(SRCLK_PORT_FND, SRCLK_PIN_FND, GPIO_PIN_RESET);
+		delay_us(5);
+	}
+
+    /*
+     * RCLK(Latch Clock) 펄스 생성
+     *
+     * - 지금까지 쉬프트 레지스터에 쌓인 8비트 데이터를
+     *   출력 래치로 복사
+     * - QA~QH 핀이 이 순간에만 갱신됨
+     *
+     * 장점:
+     * - 데이터 전송 중에는 출력이 바뀌지 않음
+     * - LED/FND 사용 시 중간 상태가 보이지 않음
+     */
+	HAL_GPIO_WritePin(RCLK_PORT_FND, RCLK_PIN_FND, GPIO_PIN_SET);
+	delay_us(10);
+	HAL_GPIO_WritePin(RCLK_PORT_FND, RCLK_PIN_FND, GPIO_PIN_RESET);
+}
+
+static const uint8_t FND_NUMBER[10] = {
+    0x3F, 0x06, 0x5B, 0x4F, 0x66,
+    0x6D, 0x7D, 0x27, 0x7F, 0x67
+};
+
+void SEVEN_FND_Init()
+{
+	dataOut_FND(FND_NUMBER[1]);
+}
+
+static void Dig_AllOff(void)
+{
+    HAL_GPIO_WritePin(DIG1_PORT,DIG1_PORT,DIG_OFF);
+    HAL_GPIO_WritePin(DIG2_PORT,DIG2_PORT,DIG_OFF);
+    HAL_GPIO_WritePin(DIG3_PORT,DIG3_PORT,DIG_OFF);
+    HAL_GPIO_WritePin(DIG4_PORT,DIG4_PORT,DIG_OFF);
+
+
+}
+
+static void Dig_On(uint8_t d) // 0~3
+{
+    HAL_GPIO_WritePin(FNDLed[DIG_INDEX[d]].port,
+                      FNDLed[DIG_INDEX[d]].number,
+                      DIG_ON);
+}
+
+/* tiny delay to reduce ghosting */
+static inline void tiny_delay(void)
+{
+    for (volatile int i = 0; i < 80; i++) { __NOP(); }
+}
+
+
+void SEVEN_FND()
+{
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 0~9 segment patterns */
+
+//
+///* Segment pin indices (a~g order) */
+//static const uint8_t SEG_INDEX[7] = {0, 1, 2, 3, 5, 8, 9};
+//
+///* Digit pin indices (DIG1~DIG4 order) */
+//static const uint8_t DIG_INDEX[4] = {4, 6, 7, 10};
+//
+///* Display buffer (4 digits) : each item is a 7-bit segment pattern */
+//static volatile uint8_t g_disp[4] = {0, 0, 0, 0};
+//
+//
+///* =======================
+// *  Low-level helpers
+// *  ======================= */
+//static void Seg_Write(uint8_t pat)
+//{
+//    for (int i = 0; i < 7; i++)
+//    {
+//        GPIO_PinState st = (pat & (1u << i)) ? FNDLed[SEG_INDEX[i]].onState
+//                                             : FNDLed[SEG_INDEX[i]].offState;
+//
+//        HAL_GPIO_WritePin(FNDLed[SEG_INDEX[i]].port,
+//                          FNDLed[SEG_INDEX[i]].number,
+//                          st);
+//    }
+//}
+//
+
+///* =======================
+// *  Scan one step (call fast)
+// *  ======================= */
+//void FND_ScanOnce(void)
+//{
+//    static uint8_t scan = 0;
+//
+//    Dig_AllOff();
+//    tiny_delay();
+//
+//    Seg_Write(g_disp[scan]);
+//    tiny_delay();
+//
+//    Dig_On(scan);
+//
+//    scan = (scan + 1) & 0x03;
+//}
+//
+///* =======================
+// *  Contents
+// *  ======================= */
+//void DAY_1(void)
+//{
+//    g_disp[0] = SEG_d;
+//    g_disp[1] = SEG_A;
+//    g_disp[2] = SEG_Y;
+//    g_disp[3] = FND2_NUMBER[1];
+//}
+//
+//void DAY_2(void)
+//{
+//    g_disp[0] = SEG_d;
+//    g_disp[1] = SEG_A;
+//    g_disp[2] = SEG_Y;
+//    g_disp[3] = FND2_NUMBER[2];
+//}
+//
+//void DAY_3(void)
+//{
+//    g_disp[0] = SEG_d;
+//    g_disp[1] = SEG_A;
+//    g_disp[2] = SEG_Y;
+//    g_disp[3] = FND2_NUMBER[3];
+//}
+//
+//void DAY_4(void)
+//{
+//    g_disp[0] = SEG_d;
+//    g_disp[1] = SEG_A;
+//    g_disp[2] = SEG_Y;
+//    g_disp[3] = FND2_NUMBER[4];
+//}
+//
+///* 0~9 test: all digits show same number */
+//void FND_Test_0to9_AllDigit(void)
+//{
+//    static uint32_t t = 0;
+//    static uint8_t n = 0;
+//
+//    if (HAL_GetTick() - t >= 500)
+//    {
+//        t = HAL_GetTick();
+//        n = (n + 1) % 10;
+//
+//        uint8_t pat = FND2_NUMBER[n];
+//        g_disp[0] = pat;
+//        g_disp[1] = pat;
+//        g_disp[2] = pat;
+//        g_disp[3] = pat;
+//    }
+//}
+//
+
+void FND_CONTROL(void)
+{
+
+}
+
+
