@@ -74,6 +74,9 @@ static int idx2 = 4;
 
 static bool Flag = 0;		//외부에서 버튼이 바꿔주는 인자
 
+
+
+
 void LED_BAR_UP()			//엘리베이터가 오는동안 위로 표시
 {
 	if(Flag != 0)
@@ -98,6 +101,29 @@ void LED_BAR_DOWN()			//엘리베이터가 오는동안 아래로 표시
 		dataOut_LED(0x00);
 
 	}
+}
+
+
+void LED_BAR_Reset(void)
+{
+    Pattern = 0;
+    dataOut_LED(0x00);
+
+    // UP 영역(0~3)
+    idx1 = 3;
+    role1 = 0;
+
+    // DOWN 영역(4~7)
+    idx2 = 4;
+    role2 = 0;
+
+    prevTick = HAL_GetTick(); // 바로 다음 tick 폭주 방지(선택)
+}
+
+void LED_BAR_OFF(void)
+{
+    Pattern = 0;
+    dataOut_LED(0x00);
 }
 
 

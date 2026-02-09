@@ -1,0 +1,58 @@
+
+#include "elevator.h"
+
+
+
+uint8_t current_floor = 1;
+static uint8_t destination_floor = 0;
+static uint8_t requested_floor = 0;
+static uint8_t button_flag = 0; // 눌린건지 확인
+//static uint8_t outside = 0; // 외부에서 눌린건지
+static uint8_t upordown = 0; // 위 아래 판단
+static uint8_t openorclose = 0;	//문이 열렸는지 닫혔는지 판단
+static uint16_t step_count = 0;
+static uint32_t prevMoveTime = 0;
+
+
+typedef enum	//버튼 모음
+{
+	BTN_IN_1F,
+	BTN_IN_2F,
+	BTN_IN_3F,
+	BTN_IN_EMG,
+}BTN;
+
+// 최대 최소 층수
+
+#define FLOOR_MIN 1
+#define FLOOR_MAX 3
+
+typedef enum	//승강기의 상태를 0,1,2,3으로 받기위해
+{
+	IDLE,
+	MOVE,
+	DOOR,
+	PAUSE,
+}STATE;
+
+bool CHECK_FLOOR_OVERFLOW(uint8_t floor)	//층 유효범위 체크
+{
+	return (floor >= FLOOR_MIN && floor <= FLOOR_MAX);
+}
+
+
+uint8_t REQ_BIT(uint8_t floor)		//floor bit 001 010 100 으로 시프트
+{
+	if(!CHECK_FLOOR_OVERFLOW(floor))
+		return 0;
+	else
+		return 1 << (floor - 1);
+}
+
+bool REQ_CHECK(uint8_t idx, uint8_t floor)	//요청이 있는지 확인
+{
+	uint8_t st = REQ_BIT(floor);
+	return (st != 0) && ((idx & st) != 0);
+	//
+}
+

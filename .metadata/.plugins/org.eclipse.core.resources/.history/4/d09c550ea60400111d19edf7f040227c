@@ -1,0 +1,159 @@
+
+#include "elevator.h"
+
+
+
+uint8_t current_floor = 1;
+static uint8_t destination_floor = 0;
+static uint8_t requested_floor = 0;
+static uint8_t button_flag = 0; // 눌린건지 확인
+static uint8_t emg_stop_floor = 0;	// 비상정지시 찾아갈 가장 가까운 층
+//static uint8_t outside = 0; // 외부에서 눌린건지
+static uint8_t upordown = 0; // 위 아래 판단
+static uint8_t openorclose = 0;	//문이 열렸는지 닫혔는지 판단
+static uint16_t step_count = 0;
+static uint32_t prevMoveTime = 0;
+
+
+typedef enum	//버튼 모음
+{
+	BTN_IN_1F,
+	BTN_IN_2F,
+	BTN_IN_3F,
+	BTN_IN_EMG,
+}BTN;
+
+// 최대 최소 층수
+
+#define FLOOR_MIN 1
+#define FLOOR_MAX 3
+
+typedef enum	//승강기의 상태를 0,1,2,3으로 받기위해
+{
+	IDLE,
+	MOVE,
+	DOOR,
+	PAUSE,
+}STATE;
+
+bool CHECK_FLOOR_OVERFLOW(uint8_t floor)	//층 유효범위 체크
+{
+	return (floor >= FLOOR_MIN && floor <= FLOOR_MAX);
+}
+
+
+uint8_t REQ_BIT(uint8_t currentfloor)		//floor bit 001 010 100 으로 시프트
+{
+	if(!CHECK_FLOOR_OVERFLOW(currentfloor))
+		return 0;
+	else
+		return 1 << (currentfloor - 1);
+}
+
+//===요청이 있는지 확인===
+bool REQ_CHECK( uint8_t cur_floor, uint8_t req_floor)
+{
+	uint8_t st = REQ_BIT(cur_floor);
+	return (st != 0) && ((st & req_floor) != 0);
+	/*
+	 *
+	 * st != 0 은 req_bit를 거쳐 나온게 유효한지 검사
+	 * (st & requestedfloor) != 0 은 idx에서 st의 비교
+	 * idx비트에 st가 가리키는 비트가있다면 1이나온다
+	 * 왼쪽과 비교해서 1 && 1이 나와야 return으로 1
+	 * 요청있다고 판단
+	*/
+}
+
+//===요청 토글(버튼으로 추가/취소)===
+
+void REQ_TOGGLE(uint8_t floor)
+{
+	uint8_t st = REQ_BIT(floor);
+	if(st == 0) return;
+	requested_floor ^= st;
+}
+
+// === 요청중 가까운층 선택 ===
+
+uint8_t REQ_NEAREST(uint8_t cur_idx, uint8_t req_idx)
+{
+	if(req_idx == 0) return 0;	//아무것도 없으면 그냥 넘어감
+
+	uint8_t best_floor = 0;			// 현재까지 선택된 층에서 가장 가까운 층
+	uint8_t bestDist = 0xff;	// 현재까지 최소거리
+
+	for(uint8_t i = FLOOR_MIN; i <= FLOOR_MAX; i++)
+	{
+		if(REQ_CHECK(i, req_idx))		//요청이 있다고 판단이 되면
+		{
+			uint8_t dist = (cur_idx > i) ? (cur_idx - i) : (i - cur_idx);	//층수 차이만큼 dist 저장
+			if(dist < bestDist)			//dist가 bestDist보다 짧다고 판단되면
+			{
+				bestDist = dist;			//갱신
+				best_floor = i;
+			}
+		}
+	}
+	return best_floor;
+}
+
+void ELEVATOR_DIR()
+{
+	if(destination_floor == 0 || destination_floor == current_floor) //초기화상태거나 현재층이 목적층과 같을때
+	{
+		upordown = 0;		//정지
+	}
+	else if(destination_floor > current_floor)
+	{
+		upordown = 1;		//UP
+	}
+	else
+	{
+		upordown = 2;		//DOWN
+	}
+}
+
+// === 비상정지 함수들 ===
+
+void ALL_OUTPUTS_OFF(void)		//모든 LED 끄기
+{
+    dataOut_LED(0x00);
+    dataOut_SEG(0x00);
+    Dig_AllOff();
+    dataOut_FND(0x00);
+}
+
+
+void MOTOR_STOP(void)			//모터 정지
+{
+    rotateInit();
+    rotateSteps(0, 0);
+    upordown = 0;
+}
+
+void EMG_STOP_NEXT(void)			//비상정지 이후 작동 함수
+{
+	if(upordown == 1)		//UP
+	{
+		emg_stop_floor = (current_floor < FLOOR_MAX) ? (current_floor + 1) : current_floor;
+	}
+	if(upordown == 2)		//DOWN
+		{
+			emg_stop_floor = (current_floor > FLOOR_MAX) ? (current_floor - 1) : current_floor;
+		}
+	else
+	{
+		emg_stop_floor = current_floor;
+	}
+}
+
+// === 층 변화 이벤트 처리 ===
+
+
+
+
+
+
+
+

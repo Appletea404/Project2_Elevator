@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -121,7 +120,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART2_UART_Init();
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 
@@ -129,6 +127,7 @@ int main(void)
 
 
   SEVEN_SEG_Init();
+  FND_Init();
 
 
 
@@ -139,7 +138,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  ButtonMove(current_floor);
+	  ELEVATOR_MOVE();
 	  FND_ScanOnce();
 
     /* USER CODE END WHILE */

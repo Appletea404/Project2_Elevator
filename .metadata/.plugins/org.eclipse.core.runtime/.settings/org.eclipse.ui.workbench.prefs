@@ -2,6 +2,8 @@
 //org.eclipse.ui.commands/state/org.eclipse.ui.navigator.resources.nested.changeProjectPresentation/org.eclipse.ui.commands.radioState=false
 UIActivities.org.eclipse.cdt.debug.dsfgdbActivity=true
 eclipse.preferences.version=1
+editors=<?xml version\="1.0" encoding\="UTF-8"?>\n<editors>\n<descriptor id\="org.eclipse.ui.browser.editorSupport" image\="$nl$/icons/obj16/internal_browser.png" internal\="false" label\="Web Browser" launcher\="org.eclipse.ui.internal.browser.BrowserLauncher" openMode\="4" open_in_place\="false" plugin\="org.eclipse.ui.browser"/>\n<descriptor class\="com.st.stm32cube.ide.mpu.linux.ide.editor.DTSEditor" id\="com.st.stm32cube.ide.mpu.linux.ide.editor.DTSEditor" image\="icons/dts_icon.png" internal\="true" label\="Device Tree Editor" openMode\="1" open_in_place\="false" plugin\="com.st.stm32cube.ide.mpu.linux.ide"/>\n</editors>
+org.eclipse.ui.commands=<?xml version\="1.0" encoding\="UTF-8"?>\n<org.eclipse.ui.commands>\n<keyBinding contextId\="org.eclipse.ui.contexts.window" keyConfigurationId\="org.eclipse.ui.defaultAcceleratorConfiguration" keySequence\="CTRL+F11"/>\n<keyBinding contextId\="org.eclipse.ui.contexts.window" keyConfigurationId\="org.eclipse.ui.defaultAcceleratorConfiguration" keySequence\="CTRL+F"/>\n<keyBinding contextId\="org.eclipse.ui.contexts.window" keyConfigurationId\="org.eclipse.ui.defaultAcceleratorConfiguration" keySequence\="CTRL+F"/>\n<keyBinding commandId\="org.eclipse.search.ui.openFileSearchPage" contextId\="org.eclipse.ui.contexts.window" keyConfigurationId\="org.eclipse.ui.defaultAcceleratorConfiguration" keySequence\="CTRL+F"/>\n</org.eclipse.ui.commands>
 org.eclipse.ui.workbench.ACTIVE_NOFOCUS_TAB_BG_END=41,41,41
 org.eclipse.ui.workbench.ACTIVE_NOFOCUS_TAB_BG_START=43,44,45
 org.eclipse.ui.workbench.ACTIVE_NOFOCUS_TAB_TEXT_COLOR=204,204,204
@@ -11,3 +13,4 @@ org.eclipse.ui.workbench.ACTIVE_TAB_TEXT_COLOR=221,221,221
 org.eclipse.ui.workbench.INACTIVE_TAB_BG_END=49,53,56
 org.eclipse.ui.workbench.INACTIVE_TAB_BG_START=59,64,66
 org.eclipse.ui.workbench.INACTIVE_TAB_TEXT_COLOR=187,187,187
+resourcetypes=<?xml version\="1.0" encoding\="UTF-8"?>\n<editors version\="3.1">\n<info extension\="shtml" name\="*">\n<editor id\="org.eclipse.ui.browser.editorSupport"/>\n</info>\n<info extension\="dtsi" name\="*">\n<editor id\="com.st.stm32cube.ide.mpu.linux.ide.editor.DTSEditor"/>\n</info>\n<info extension\="dts" name\="*">\n<editor id\="com.st.stm32cube.ide.mpu.linux.ide.editor.DTSEditor"/>\n</info>\n<info extension\="htm" name\="*">\n<editor id\="org.eclipse.ui.browser.editorSupport"/>\n</info>\n<info extension\="html" name\="*">\n<editor id\="org.eclipse.ui.browser.editorSupport"/>\n</info>\n</editors>

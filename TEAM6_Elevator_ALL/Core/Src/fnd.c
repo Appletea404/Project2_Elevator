@@ -140,6 +140,14 @@ static inline uint8_t floor_to_seg(uint8_t floor)
     }
 }
 
+void FND_Init()
+{
+    display[0] = SEG_U;
+    display[1] = SEG_P;
+    display[2] = SEG_1;
+    display[3] = SEG_F;
+}
+
 void FND_SetUp(uint8_t floor)
 {
     display[0] = SEG_U;                 // DIG1

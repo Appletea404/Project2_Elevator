@@ -1,0 +1,104 @@
+#include "button.h"
+
+
+
+BUTTON_CONTROL button[10]=
+    {
+        {GPIOC, GPIO_PIN_9, 0},			//버튼1
+        {GPIOB, GPIO_PIN_8, 0},			//버튼2
+        {GPIOB, GPIO_PIN_9, 0},			//버튼3
+        {GPIOA, GPIO_PIN_5, 0},			//버튼4
+        {GPIOB, GPIO_PIN_6, 0},			//버튼5
+        {GPIOC, GPIO_PIN_7, 0},			//버튼6
+        {GPIOA, GPIO_PIN_9, 0},			//버튼7
+        {GPIOA, GPIO_PIN_8, 0},			//버튼8
+        {GPIOB, GPIO_PIN_10, 0},		//버튼9
+        {GPIOB, GPIO_PIN_4, 0},			//버튼10
+
+    };
+
+
+
+bool buttonGetPressed(uint8_t num)
+{
+    if(num >= BUTTON_COUNT) return false;
+
+    static uint8_t  prevLevel[BUTTON_COUNT] = {0};
+    static uint32_t lastChange[BUTTON_COUNT] = {0};
+
+    uint8_t level = (HAL_GPIO_ReadPin(button[num].port, button[num].number) == button[num].onState) ? 1 : 0;
+    uint32_t now = HAL_GetTick();
+
+    // 레벨이 바뀌면 시간 갱신
+    if(level != prevLevel[num])
+    {
+        prevLevel[num] = level;
+        lastChange[num] = now;
+        return false;
+    }
+
+    // 일정 시간(디바운스) 안정화 후, "눌림" 상태가 유지되고 있으면 1회만 발생시키기
+    static uint8_t latched[BUTTON_COUNT] = {0};
+
+    if((now - lastChange[num]) >= 30)  // 30ms 디바운스 예시
+    {
+        if(level == 1 && latched[num] == 0)
+        {
+            latched[num] = 1;
+            return true;              // "눌린 순간" 1회
+        }
+        if(level == 0)
+        {
+            latched[num] = 0;         // 뗐으면 다음 눌림 준비
+        }
+    }
+
+    return false;
+}
+
+
+
+//bool buttonGetPressed(uint8_t num)
+//{
+//    static uint32_t prevTime[10] = {0};
+//    bool ret = false;
+//
+//    if(num >= 10) return false;
+//
+//    if(HAL_GPIO_ReadPin(button[num].port, button[num].number) == button[num].onState)
+//    {
+//        uint32_t currTime = HAL_GetTick();
+//        if(currTime - prevTime[num] > 100)
+//        {
+//            if(HAL_GPIO_ReadPin(button[num].port, button[num].number) == button[num].onState)
+//                ret = true;
+//
+//            prevTime[num] = currTime;
+//        }
+//    }
+//    return ret;
+//}
+
+
+
+//bool buttonGetPressed(uint8_t num)
+//{
+//  static uint32_t prevTime = 0;
+//  bool ret = false;
+//
+//  if(HAL_GPIO_ReadPin(button[num].port,button[num].number) == button[num].onState)
+//  {
+//    uint32_t currTime = HAL_GetTick();
+//    if(currTime - prevTime > 100)
+//    {
+//      if(HAL_GPIO_ReadPin(button[num].port,button[num].number) == button[num].onState)
+//      {
+//            ret = true;
+//      }
+//      prevTime = currTime;
+//    }
+//  }
+//  return ret;
+//}
+
+

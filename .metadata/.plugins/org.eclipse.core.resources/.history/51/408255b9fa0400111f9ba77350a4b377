@@ -1,0 +1,43 @@
+#include "button.h"
+
+
+
+BUTTON_CONTROL button[10]=
+    {
+        {GPIOC, GPIO_PIN_9, 0},			//버튼1
+        {GPIOB, GPIO_PIN_8, 0},			//버튼2
+        {GPIOB, GPIO_PIN_9, 0},			//버튼3
+        {GPIOA, GPIO_PIN_5, 0},			//버튼4
+        {GPIOB, GPIO_PIN_6, 0},			//버튼5
+        {GPIOC, GPIO_PIN_7, 0},			//버튼6
+        {GPIOA, GPIO_PIN_9, 0},			//버튼7
+        {GPIOA, GPIO_PIN_8, 0},			//버튼8
+        {GPIOB, GPIO_PIN_10, 0},		//버튼9
+        {GPIOB, GPIO_PIN_4, 0},			//버튼10
+
+    };
+
+
+
+
+bool buttonGetPressed(uint8_t num)
+{
+  static uint32_t prevTime = 0;
+  bool ret = false;
+
+  if(HAL_GPIO_ReadPin(button[num].port,button[num].number) == button[num].onState)
+  {
+    uint32_t currTime = HAL_GetTick();
+    if(currTime - prevTime > 100)
+    {
+      if(HAL_GPIO_ReadPin(button[num].port,button[num].number) == button[num].onState)
+      {
+            ret = true;
+      }
+      prevTime = currTime;
+    }
+  }
+  return ret;
+}
+
+

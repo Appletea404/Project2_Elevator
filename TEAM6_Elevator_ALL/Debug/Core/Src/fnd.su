@@ -5,7 +5,8 @@
 ../Core/Src/fnd.c:115:6:FND_ScanOnce	8	static
 ../Core/Src/fnd.c:128:20:tiny_delay	16	static,ignoring_inline_asm
 ../Core/Src/fnd.c:133:23:floor_to_seg	16	static
-../Core/Src/fnd.c:143:6:FND_SetUp	16	static
-../Core/Src/fnd.c:151:6:FND_SetDown	16	static
-../Core/Src/fnd.c:164:6:FND_UP	24	static
-../Core/Src/fnd.c:172:6:FND_DOWN	24	static
+../Core/Src/fnd.c:143:6:FND_Init	4	static
+../Core/Src/fnd.c:151:6:FND_SetUp	16	static
+../Core/Src/fnd.c:159:6:FND_SetDown	16	static
+../Core/Src/fnd.c:172:6:FND_UP	24	static
+../Core/Src/fnd.c:180:6:FND_DOWN	24	static

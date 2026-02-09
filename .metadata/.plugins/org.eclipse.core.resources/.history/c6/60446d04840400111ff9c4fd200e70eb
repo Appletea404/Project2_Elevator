@@ -1,0 +1,18 @@
+
+#include "elevator.h"
+
+
+
+static uint8_t current_floor = 1;
+static uint8_t destination_floor = 0;
+static uint8_t requested_floor = 0;
+static uint8_t button_flag = 0; // 눌린건지 확인
+static uint8_t outside = 0; // 외부에서 눌린건지
+static uint8_t upordown = 0; // 위 아래 판단
+static uint8_t openorclose = 0;	//문이 열렸는지 닫혔는지 판단
+
+
+
+
+
+

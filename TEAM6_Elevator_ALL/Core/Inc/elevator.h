@@ -9,6 +9,10 @@
 #include "7seg.h"     // SEVEN_SEG()
 #include "ledbar.h"   // LED_BAR_UP_ing(), LED_BAR_DOWN_ing()
 #include "stm32f4xx_hal.h"
+#include "stdbool.h"
+
+#define DIR_CW                0 // 시계 방향
+#define DIR_CCW               1
 
 void ButtonMove(uint8_t current_floor);
 
