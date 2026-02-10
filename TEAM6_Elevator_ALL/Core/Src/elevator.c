@@ -7,6 +7,9 @@
 #define FLOOR_MIN 1
 #define FLOOR_MAX 3
 
+#define DOOR_HOLD_MS 7000 // 문열리고 대기하는 시간(대략적으로)
+
+
 
 
 typedef enum	//버튼 모음
@@ -43,12 +46,24 @@ static uint8_t out_req_up = 0;			//외부에서 위쪽버튼 눌렀을떄 상태
 static uint8_t out_req_down = 0;		//외부에서 아래쪽버튼 눌렀을때 상태 설정
 static STATE button_flag = 0; 		// 층 버튼이 눌린건지 확인
 static bool dest_in = false;		// 내부에서 설정한 목적지 판별
-static uint8_t emg_stop_floor = 0;		// 비상정지시 찾아갈 가장 가까운 층
+//static uint8_t emg_stop_floor = 0;		// 비상정지시 찾아갈 가장 가까운 층
 //static uint8_t outside = 0; // 외부에서 눌린건지
 static uint8_t upordown = 0; 			// 움직이는 엘리베이터의 위 아래 방향 판단
 static bool openorclose = false;			//문이 열렸는지 닫혔는지 판단
-static uint16_t step_count = 0;
-static uint32_t prevMoveTime = 0;
+static uint32_t doortick = 0;			//문 시간
+//static uint32_t prevMoveTime = 0;
+
+
+static void DOOR_SET(bool open)
+{
+    static int8_t last = -1;          // -1: 초기
+    if(last == (int8_t)open) return;  // 같은 명령이면 무시
+    last = open;
+
+    openorclose = open;
+    if(open) Elevator_Open();
+    else     Elevator_Close();
+}
 
 bool CHECK_FLOOR_OVERFLOW(uint8_t floor)	//층 유효범위 체크
 {
@@ -220,8 +235,8 @@ void CHANGED_FLOOR(uint8_t floor)
 	    MOTOR_STOP();
 	    dest_in = false;
 	    button_flag = DOOR;
-	    prevMoveTime = HAL_GetTick();
-	    openorclose = true;
+	    doortick = HAL_GetTick();
+	    DOOR_SET(true);
 	    return;
 	}
 
@@ -281,8 +296,8 @@ void CHANGED_FLOOR(uint8_t floor)
 		MOTOR_STOP();
 		dest_in = false;
 		button_flag = DOOR;
-		prevMoveTime = HAL_GetTick();
-		openorclose = true;
+		doortick = HAL_GetTick();
+		DOOR_SET(true);
 		return;
 	}
 
@@ -292,7 +307,6 @@ void CHANGED_FLOOR(uint8_t floor)
 }
 
 
-#define DOOR_HOLD_MS 2000 // 문열리고 대기하는 시간(대략적으로)
 
 void ELEVATOR_MOVE(void)
 {
@@ -313,7 +327,7 @@ void ELEVATOR_MOVE(void)
 		dest_in = false;
 		MOTOR_STOP();
 		ALL_OUTPUTS_OFF();
-		emg_stop_floor = 0;
+//		emg_stop_floor = 0;
 		button_flag = PAUSE;
 	}
 
@@ -330,7 +344,7 @@ void ELEVATOR_MOVE(void)
 
 			destination_floor = 0;
 			dest_in = false;
-			emg_stop_floor = 0;
+//			emg_stop_floor = 0;
 			upordown = 0;
 
 			SEVEN_SEG(current_floor);
@@ -359,6 +373,27 @@ void ELEVATOR_MOVE(void)
 	switch (button_flag) {
 		case IDLE:
 		{
+			if(buttonGetPressed(BTN_OPEN_DOOR))			//문 열림 상태 저장
+						{
+							DOOR_SET(true);
+							doortick = HAL_GetTick();
+						}
+
+			if(HAL_GetTick() - doortick > DOOR_HOLD_MS)		//문이 열리고 닫히는 동안 대기하는 시간
+						{
+							DOOR_SET(false);
+							button_flag = IDLE;
+						}
+
+			if(buttonGetPressed(BTN_CLOSE_DOOR))	//문 닫힘
+						{
+							DOOR_SET(false);
+							button_flag = IDLE;
+							break;
+						}
+
+
+
 			if(all_req != 0)	//all_req에 요청이 있을때
 			{
 				destination_floor = REQ_NEAREST(current_floor, all_req);
@@ -369,6 +404,11 @@ void ELEVATOR_MOVE(void)
 				ELEVATOR_DIR();
 				if(upordown != 0)
 				{
+					if(openorclose)
+					{
+						// 출발 전 문 닫기(이미 닫혀있으면 DOOR_SET이 알아서 무시)
+						DOOR_SET(false);
+					}
 					rotateInit();
 					button_flag = MOVE;
 				}
@@ -411,8 +451,8 @@ void ELEVATOR_MOVE(void)
 			            MOTOR_STOP();
 			            LED_BAR_OFF();                 // LED도 깔끔하게
 			            button_flag = DOOR;
-			            prevMoveTime = HAL_GetTick();
-			            openorclose = true;
+			            doortick = HAL_GetTick();
+			            DOOR_SET(true);
 			            return;
 			        }
 
@@ -443,10 +483,11 @@ void ELEVATOR_MOVE(void)
 
 				if(upordown == 0)
 				{
-					//현재층 = 목적지
 					MOTOR_STOP();
+					LED_BAR_OFF();
 					button_flag = DOOR;
-					prevMoveTime = HAL_GetTick();
+					doortick = HAL_GetTick();
+					DOOR_SET(true);
 					break;
 				}
 
@@ -485,22 +526,28 @@ void ELEVATOR_MOVE(void)
 			break;
 		case DOOR:
 		{
+
+
+
+
+
+
 			if(buttonGetPressed(BTN_CLOSE_DOOR))	//문 닫힘
 			{
-				openorclose = false;					//문 닫힘 상태 저장
+				DOOR_SET(false);
 				button_flag = IDLE;
 				break;
 			}
 
-			if(buttonGetPressed(BTN_OPEN_DOOR))			//문 열림 상태 저장
-			{
-				openorclose = true;
-				prevMoveTime = HAL_GetTick();
-			}
+//			if(buttonGetPressed(BTN_OPEN_DOOR))			//문 열림 상태 저장
+//			{
+//				DOOR_SET(true);
+//				doortick = HAL_GetTick();
+//			}
 
-			if(HAL_GetTick() - prevMoveTime > DOOR_HOLD_MS)		//문이 열리고 닫히는 동안 대기하는 시간
+			if(HAL_GetTick() - doortick > DOOR_HOLD_MS)		//문이 열리고 닫히는 동안 대기하는 시간
 			{
-				openorclose = false;
+				DOOR_SET(false);
 				button_flag = IDLE;
 			}
 		}

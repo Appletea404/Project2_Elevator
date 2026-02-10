@@ -2,3 +2,4 @@ requested_floor
 out_req_up
 out_req_down
 REQ_BIT(floor)
+TIM3->CCR1

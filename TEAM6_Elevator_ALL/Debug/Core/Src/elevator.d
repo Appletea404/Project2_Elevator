@@ -30,7 +30,7 @@ Core/Src/elevator.o: ../Core/Src/elevator.c ../Core/Inc/elevator.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Core/Inc/stepper.h ../Core/Inc/fnd.h ../Core/Inc/main.h \
  ../Core/Inc/delay.h ../Core/Inc/tim.h ../Core/Inc/7seg.h \
- ../Core/Inc/delay.h ../Core/Inc/ledbar.h
+ ../Core/Inc/delay.h ../Core/Inc/ledbar.h ../Core/Inc/motor.h
 ../Core/Inc/elevator.h:
 ../Core/Inc/button.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -70,3 +70,4 @@ Core/Src/elevator.o: ../Core/Src/elevator.c ../Core/Inc/elevator.h \
 ../Core/Inc/7seg.h:
 ../Core/Inc/delay.h:
 ../Core/Inc/ledbar.h:
+../Core/Inc/motor.h:

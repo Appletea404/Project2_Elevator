@@ -1,0 +1,2 @@
+../Core/Src/motor.c:19:6:Elevator_Open	4	static
+../Core/Src/motor.c:29:6:Elevator_Close	4	static

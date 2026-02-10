@@ -9,6 +9,9 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="/home/appletea/workspace_onedevice_2/Project 2/0B_Project_LCD_I2C"/>
+			<item value="/home/appletea/workspace_onedevice_2/Project 2/0B_1_Project_Subo_Motor"/>
+			<item value="/home/appletea/workspace_onedevice_2/Project 2/0B_1_Project_Subo_Motor_Last"/>
 			<item value="/home/appletea/workspace_onedevice_2/Project 2/TEAM6_Elevator_FND"/>
 			<item value="/home/appletea/workspace_onedevice_2/Project 2/TEAM6_Elevator_7SEG"/>
 			<item value="/home/appletea/workspace_onedevice_2/Project 2/TEAM6_Elevator_LED"/>
