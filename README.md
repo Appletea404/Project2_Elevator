@@ -2,20 +2,19 @@
 ![title](images/title.jpg)
 
 
-# 💃  Project 1 Stage Performance
+# 🛗  Project 2 Elevator
 
 ## **1. Project Summary (프로젝트 요약)**
-STM32(MCU)를 활용하여 무대 공연 장치들을 제작
+STM32(MCU)를 활용한 상용화 가능한 수준의 엘리베이터 로직 개발
 
 
 ## 2. Key Features (주요 기능)
 
-- 서브모터를 통하여 무대의 배경을 전환
-- 선풍기 모듈을 통하여 무대의 바람을 연출
-- FND를 통해 "DAY1"같은 문구로 날짜를 표현
-- 7-SEG를 통해 바람의 세기를 표현
-- 버튼과 블루투스를 통하여 무대 장치를 제어
-
+- 엘리베이터 내부/외부 버튼을 통한 실시간 층 호출
+- 주행 방향과 외부 버튼의 호출 방향이 일치하면 우선 정지
+- 주행 방향과 반대되는 호출은 대기 열에 저장 후, 순차적으로 도착
+- 내부 버튼으로 목적지 예약 기능 및 재입력 시 예약을 해제하는 토글(Toggle) 방식의 취소 기능
+- 비상정지 버튼을 누르면 비상정지 후 다시 내부버튼을 누르면 그 층으로 복귀
 
 
 ## 🛠 3.  Tech Stack (기술 스택)
@@ -41,57 +40,38 @@ STM32(MCU)를 활용하여 무대 공연 장치들을 제작
 ### 4.1 Project Tree (프로젝트 트리)
 
 ```
-Project 1 Stage Perfomance/
+Project 2 Elevator/
 ├── Core/
 │   ├── Inc/                     # 각 소스 모듈에 대응하는 헤더 파일 (.h)
 │   └── Src/                     # 프로젝트 핵심 로직 구현부 (.c)
-│       ├── main.c               # 하드웨어 초기화 및 전체 시스템 제어 루프
-│       ├── fan.c                # 팬(Fan) 속도 제어 및 7-SEG 출력 제어
-│       ├── fnd.c                # FND 디스플레이 출력 및 문구 제어
-│       ├── bt.c                 # 블루투스 통신 모듈 처리
-│       ├── rotate.c             # 모터 회전 및 각도 제어 알고리즘
-│       ├── button.c             # 사용자 버튼 입력 처리 (모드 전환 등)
-│       ├── interrupt.c          # 시스템 인터럽트 서비스 루틴 관리
-│       ├── led.c                # 시스템 상태 표시 LED 제어
-│       ├── tim.c                # PWM 및 타이머 관련 설정
-│       └── usart.c              # 블루투스/디버깅용 시리얼 통신 설정
+│       ├── main.c               # 주변장치 초기화 및 전체 시스템 제어 루프
+│       ├── elevator.c           # 엘리베이터 주행 스케줄링 및 상태 머신(FSM) 핵심 알고리즘
+│       ├── stepper.c            # 스테퍼 모터를 이용한 승강기 층간 이동
+│       ├── motor.c              # 도어 개폐용 서브 모터 로직
+│       ├── button.c             # 내/외부 호출 버튼 입력 처리
+│       ├── fnd.c & 7seg.c       # 현재 층과 이동표시를 위한 LED 제어
+│       ├── i2c_lcd.c            # I2C LCD를 이용한 상태 메시지 및 안내 출력
+│       ├── ledbar.c             # LED 바를 활용한 승강기 위치 시각화
+│       ├── delay.c              # 시스템 타이밍 최적화를 위한 정밀 지연 함수
+│       ├── tim.c                # 모터 및 디스플레이 제어를 위한 타이머 설정
+│       └── stm32f4xx_it.c       # 시스템 예외 및 버튼 인터럽트 서비스 루틴
 │
-├── images/                      # 프로젝트 시연 이미지 및 다이어그램 리소스
-├── FAN_TEAM5.ioc                # STM32CubeMX 하드웨어 구성 및 핀 배치 설계도
+├── images/                      # README용 시연 이미지 및 다이어그램 리소스
+├── TEAM6_Elevator_ALL.ioc       # STM32CubeMX 하드웨어 구성 및 핀 배치 설계도
 └── README.md                    # 프로젝트 전체 가이드 문서
 ```
 
 
 ### 4.2 Hardware BlockDiagram (하드웨어 블록다이어그램)
 
-![BlockDiagram](images/Project1_StagePerformance_BlockDiagram.png)
+![BlockDiagram](images/Elevator_BlockDiagram.png)
 
 ### 4.3 FlowChart (순서도)
 
-![FlowChart](images/Project1_StagePerformance_FlowChart.png)
+![State Machine](images/Project2_Elevator_MOVE.png)
 
-## 🏝️ 5. Final Product & Demonstration (완성품 및 시연)
+## 🌈 5. Demonstration (시연)
 
-### 5.1 Final Product (완성품)
-<br>
-
-
-|**무대 전체 샷 (Full Setup)** |
-| :---: |
-| ![ALL](images/All.jpg)|
-
-
-| **무대 내부 (Inner)** | **무대 제어부 (Side)** | 
-| :---: | :---: |
-| ![Inner](images/Inner.jpg) | ![Side](images/Side.jpg)  | 
-
-
-
-<br>
-
-
-
-### 5.2  Demonstration (시연 영상)
 
 <a href="https://youtu.be/8-iijkoDCPc?si=8JkFLacraABops5g" target="_blank">
   <img src="images/youtube.jpg" alt="Watch Demo Video" width="300" />
@@ -103,55 +83,112 @@ Project 1 Stage Perfomance/
 ## 6. Troubleshooting (문제 해결 기록)
 
 <details>
-<summary> <b> 서보모터 구동시 FND 출력 왜곡 문제 </b></summary>
+<summary> <b> 블로킹 (Blocking) </b></summary>
 
 <br>
 
 🔍  **Issue (문제 상황)**
 
-- FND의 출력이 서브모터가 작동중이면 제대로 **"DAY1"** 문구가 정상적으로 출력되지 않음
+- 스테퍼 모터(Stepper), 서보 모터(Servo), LED, CLCD, 버튼 등이 개별적으로 작동시에는 문제없음
+- 동시에 구동 시 동작 간섭이 발생하여 시스템이 멈추거나 버튼 입력을 감지하지 못하는 현상 발생
 
 ❓ **Analysis (원인 분석)**
 
-- FND는 다이내믹 디스플레이(Dynamic Display) 방식으로, 4개의 자릿수를 아주 빠른 속도로 번갈아 켜서 동시에 켜진 것처럼 보이게 함(Multiplexing)
-- 이것이 Polling 방식이라 서브모터의 동작과 충돌을 일으킴
+
+- 엘리베이터 시스템 특성상 다수의 입력 버튼이 필요했으나, STM32의 EXTI(외부 인터럽트) 라인 공유 문제(MUX 방식)로 인해 모든 버튼을 인터럽트로 구성하는 데 한계가 있음
+- 대부분의 출력 장치(모터, LCD)와 입력 장치(버튼)가 폴링(Polling) 방식으로 설계되어, 특정 동작이 완료될 때까지 CPU가 대기하는 블로킹(Blocking) 현상이 발생하여 멀티태스킹이 불가능함을 확인
 
 
 ❗ **Action (해결 방법)**
 
-- __NOP() (No Operation) 인스트럭션을 활용한 tiny_delay() 함수 구현
-- CPU의 시스템 클럭(Tick)보다는 길고, 모터 제어 루프에는 영향을 주지 않는 최적화된 대기 시간을 설정하여 FND 자릿수 전환 타이밍을 조정
+- 모든 출력과 동작을 Non-blocking으로 제작
+- 버튼의 입력 감지를 최우선
 
 ✅ **Result (결과)**
 
-- 서보 모터의 동작 유무와 상관없이 FND의 문구가 떨림 없이 안정적으로 출력됨.
+- 여러 장치가 동시에 구동되는 상황에서도 병렬동작 가능
 
 </details>
 
 
 <details>
-<summary> <b> 버튼 입력 인식 불가 현상 </b></summary>
+<summary> <b> 이중입력 (Duplicate Input) </b></summary>
 
 <br>
 
 🔍  **Issue (문제 상황)**
 
-- 서보 모터가 회전하고 있는 도중에는 사용자 버튼 입력이 감지되지 않는 불안정성 발견
+- 내부 층 버튼을 한 번만 눌렀음에도 2번 이상 입력된 것으로 인식되어, 토글(Toggle) 기능에 의해 목표층 예약이 즉시 취소되는 현상 발생
 
 ❓ **Analysis (원인 분석)**
 
-- 버튼 입력과 모터 구동 로직이 모두 메인 루프 내에서 폴링(Polling) 방식으로 동작함
+- 아날로그 버튼의 물리적 특성인 채터링(Chattering/Bouncing) 현상으로 인해, 짧은 시간 동안 여러 번의 입력을 MCU가 감지
+- 토글 로직이 이중·삼중 입력을 각각 별개의 명령으로 처리하여 예약과 취소가 순식간에 교차 발생
 
-- MCU가 모터의 회전을 컨트롤하는 동안 버튼 상태를 체크하는 로직이 실행되지 못해 입력 신호를 놓치는(Miss) 현상 발생
 
 ❗ **Action (해결 방법)**
 
-- 버튼 입력 시스템을 **외부 인터럽트(External Interrupt)** 방식으로 전환
-- 서브모터 로직이 수행 중이더라도 MCU가 인지하도록 변경
+- 입력 래치(Latch) 검사 로직 도입: 버튼이 눌린 직후 상태를 고정(Lock)하고, 버튼에서 손을 떼는 순간에 종료
+- Busy상태에 진입하면 무조건 1번의 입력만 받도록 로직 설계
 
 ✅ **Result (결과)**
 
-서브모터가 작동중이어도 버튼 데이터가 실시간으로 즉각 반영
+- 내부버튼의 토글기능이 정상적으로 잘 작동함
 </details>
+
+
+
+
+<details>
+<summary> <b> 층 예약 (Floor Request System) </b></summary>
+
+<br>
+
+🔍  **Issue (문제 상황)**
+
+- 승강기 이동 중에 새로운 층을 예약하면 기존의 목표층 데이터가 소실되고, 가장 최근에 입력된 층으로 경로가 즉시 바뀌는 오류 발생
+
+❓ **Analysis (원인 분석)**
+
+- 목표층 정보를 저장하는 변수가 단일 구조로 설계되어 있어, 새로운 호출이 발생할 때마다 기존 데이터가 덮어씌워짐(Overwrite)
+
+
+❗ **Action (해결 방법)**
+
+- 요구받은 층을 저장하는 변수를 **Requested_floor** 란 변수를 새로 선언해서 층의 입력만 받도록함
+- 모터 동작은 **Destination_floor** 이라는 변수를 만들어서 이쪽의 정보로만 움직이게 함
+- 엘리베이터가 층에 도착했을때 두 변수를 비교하여 그 층에 멈춰설지 다음 층으로 이동할지 판단 시킴
+
+✅ **Result (결과)**
+
+- 승강기의 예약층 버튼 기능이 성공적으로 작동함
+</details>
+
+
+<details>
+<summary> <b> 승강기의 방향 (Direction) </b></summary>
+
+<br>
+
+🔍  **Issue (문제 상황)**
+
+- 외부 엘리베이터 버튼은 상/하 방향을 포함하고 있음
+- 엘리베이터 동작 방향에 맞게 층을 무시하거나 멈춰야하는데 무조건적으로 멈춤
+
+❓ **Analysis (원인 분석)**
+
+- 승강기의 현재 주행 상태와 외부 호출의 방향성을 대조하는 판단 변수가 없어서 위치 기반으로만 정지함
+
+
+❗ **Action (해결 방법)**
+
+- **out_req_up** , **out_req_down** 변수를 선언하여 외부에서 입력한 방향이 어디인지 저장
+- 승강기의 진행 방향과 외부 호출 방향이 일치할 때만 정지하고, 반대 방향일 경우 해당 호출을 무시하고 지나친 뒤 동작 완료 후 복귀하여 처리
+
+✅ **Result (결과)**
+
+- 외부버튼의 방향에 따라 승강기가 우선순위를 정해 층을 찾아가는 효율적인 우선순위 알고리즘 구현
+</details>
+
 
 
