@@ -66,7 +66,7 @@ Project 2 Elevator/
 
 ![BlockDiagram](images/Elevator_BlockDiagram.png)
 
-### 4.3 FlowChart (순서도)
+### 4.3 Statemachine (상태 머신)
 
 ![State Machine](images/Project2_Elevator_MOVE.png)
 
