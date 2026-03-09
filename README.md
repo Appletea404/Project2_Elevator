@@ -47,7 +47,7 @@ Project 2 Elevator/
 │       ├── main.c               # 주변장치 초기화 및 전체 시스템 제어 루프
 │       ├── elevator.c           # 엘리베이터 주행 스케줄링 및 상태 머신(FSM) 핵심 알고리즘
 │       ├── stepper.c            # 스테퍼 모터를 이용한 승강기 층간 이동
-│       ├── motor.c              # 도어 개폐용 서브 모터 로직
+│       ├── motor.c              # 도어 개폐용 서보 모터 로직
 │       ├── button.c             # 내/외부 호출 버튼 입력 처리
 │       ├── fnd.c & 7seg.c       # 현재 층과 이동표시를 위한 LED 제어
 │       ├── i2c_lcd.c            # I2C LCD를 이용한 상태 메시지 및 안내 출력
@@ -73,7 +73,7 @@ Project 2 Elevator/
 ## 🌈 5. Demonstration (시연)
 
 
-<a href="https://youtu.be/8-iijkoDCPc?si=8JkFLacraABops5g" target="_blank">
+<a href="https://youtube.com/playlist?list=PL6xfXHA4BYR-s5s7apoRJ_Ob76u2-pkTi&si=Q4Dn0nLA2PKm6QS-" target="_blank">
   <img src="images/youtube.jpg" alt="Watch Demo Video" width="300" />
 </a>
 
