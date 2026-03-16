@@ -82,10 +82,8 @@ Project 2 Elevator/
 
 ## 6. Troubleshooting (문제 해결 기록)
 
-<details>
-<summary> <b> 블로킹 (Blocking) </b></summary>
+### 6.1 블로킹 (Blocking) 
 
-<br>
 
 🔍  **Issue (문제 상황)**
 
@@ -95,7 +93,7 @@ Project 2 Elevator/
 ❓ **Analysis (원인 분석)**
 
 
-- 엘리베이터 시스템 특성상 다수의 입력 버튼이 필요했으나, STM32의 EXTI(외부 인터럽트) 라인 공유 문제(MUX 방식)로 인해 모든 버튼을 인터럽트로 구성하는 데 한계가 있음
+- 엘리베이터 시스템 특성상 다수의 입력 버튼이 필요했으나, STM32의 **EXTI(외부 인터럽트)** 라인 공유 문제(MUX 방식)으로 인해 모든 버튼을 인터럽트로 구성하는 데 한계가 있음
 - 대부분의 출력 장치(모터, LCD)와 입력 장치(버튼)가 폴링(Polling) 방식으로 설계되어, 특정 동작이 완료될 때까지 CPU가 대기하는 블로킹(Blocking) 현상이 발생하여 멀티태스킹이 불가능함을 확인
 
 
@@ -108,13 +106,11 @@ Project 2 Elevator/
 
 - 여러 장치가 동시에 구동되는 상황에서도 병렬동작 가능
 
-</details>
+---
 
 
-<details>
-<summary> <b> 이중입력 (Duplicate Input) </b></summary>
+ ### 6.2 이중입력 (Duplicate Input)
 
-<br>
 
 🔍  **Issue (문제 상황)**
 
@@ -122,27 +118,24 @@ Project 2 Elevator/
 
 ❓ **Analysis (원인 분석)**
 
-- 아날로그 버튼의 물리적 특성인 채터링(Chattering/Bouncing) 현상으로 인해, 짧은 시간 동안 여러 번의 입력을 MCU가 감지
+- 아날로그 버튼의 물리적 특성인 **채터링(Chattering/Bouncing)** 현상으로 인해, 짧은 시간 동안 여러 번의 입력을 MCU가 감지
 - 토글 로직이 이중·삼중 입력을 각각 별개의 명령으로 처리하여 예약과 취소가 순식간에 교차 발생
 
 
 ❗ **Action (해결 방법)**
 
-- 입력 래치(Latch) 검사 로직 도입: 버튼이 눌린 직후 상태를 고정(Lock)하고, 버튼에서 손을 떼는 순간에 종료
-- Busy상태에 진입하면 무조건 1번의 입력만 받도록 로직 설계
+- 입력 **래치(Latch)** 검사 로직 도입: 버튼이 눌린 직후 상태를 고정(Lock)하고, 버튼에서 손을 떼는 순간에 종료
+- **Busy**상태에 진입하면 무조건 1번의 입력만 받도록 로직 설계
 
 ✅ **Result (결과)**
 
 - 내부버튼의 토글기능이 정상적으로 잘 작동함
-</details>
+
+---
 
 
+### 6.3 층 예약 (Floor Request System) 
 
-
-<details>
-<summary> <b> 층 예약 (Floor Request System) </b></summary>
-
-<br>
 
 🔍  **Issue (문제 상황)**
 
@@ -162,13 +155,11 @@ Project 2 Elevator/
 ✅ **Result (결과)**
 
 - 승강기의 예약층 버튼 기능이 성공적으로 작동함
-</details>
 
+---
 
-<details>
-<summary> <b> 승강기의 방향 (Direction) </b></summary>
+### 6.4 승강기의 방향 (Direction)
 
-<br>
 
 🔍  **Issue (문제 상황)**
 
@@ -188,7 +179,7 @@ Project 2 Elevator/
 ✅ **Result (결과)**
 
 - 외부버튼의 방향에 따라 승강기가 우선순위를 정해 층을 찾아가는 효율적인 우선순위 알고리즘 구현
-</details>
+
 
 
 
