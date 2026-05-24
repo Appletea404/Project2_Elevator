@@ -5,7 +5,7 @@
 # 🛗  Project 2 Elevator
 
 ## **1. Project Summary (프로젝트 요약)**
-STM32(MCU)를 활용한 상용화 가능한 수준의 엘리베이터 로직 개발
+STM32(MCU)를 활용하여 실제 엘리베이터와 유사한 로직의 개발
 
 
 ## 2. Key Features (주요 기능)
